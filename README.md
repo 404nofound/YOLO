@@ -1,2 +1,0 @@
-# YOLO
-Record YOLO study
