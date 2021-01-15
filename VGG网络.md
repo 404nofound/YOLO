@@ -91,8 +91,10 @@ same对边界进行补零操作，可以保证输入shape与输出shape相同
 
 
 ## 参考
-[知乎: 一文读懂VGG网络](https://zhuanlan.zhihu.com/p/41423739)
-[知乎提问: 卷积神经网络的卷积核大小](https://www.zhihu.com/question/38098038)
-[深度学习-VGG16原理详解](https://blog.csdn.net/weixin_43496706/article/details/101210981)
-[神经网络学习小记录16](https://blog.csdn.net/weixin_44791964/article/details/102585038)
-[]()
+[知乎: 一文读懂VGG网络](https://zhuanlan.zhihu.com/p/41423739)  
+
+[知乎提问: 卷积神经网络的卷积核](https://www.zhihu.com/question/38098038)  
+
+[深度学习-VGG16原理详解](https://blog.csdn.net/weixin_43496706/article/details/101210981)  
+
+[神经网络学习小记录16](https://blog.csdn.net/weixin_44791964/article/details/102585038)  
