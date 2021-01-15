@@ -3,9 +3,7 @@
 **卷积神经网络基础**  
 
 推荐几篇通俗易懂的文章，理解卷积意义：加权叠加  
-[卷积神经网络CNN完全指南终极版（一）](https://zhuanlan.zhihu.com/p/27908027?_blank)  
-
-<a href=“https://zhuanlan.zhihu.com/p/28173972” target="_blank">卷积神经网络CNN完全指南终极版（二）</a>  
+[卷积神经网络CNN完全指南终极版（一）](https://zhuanlan.zhihu.com/p/27908027)  
 
 [卷积神经网络CNN完全指南终极版（二）](https://zhuanlan.zhihu.com/p/28173972)  
 
