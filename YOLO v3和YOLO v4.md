@@ -28,7 +28,10 @@ yolov3处理图片过程如下
 首先一张图片传进yolo，yolo会将其转化为416×416大小的网格，增加灰度条用于防止失真，之后图片会分成三个网格图片（13×13，26×26，52×52）
 
 ### 网络结构图
+<div align=center>
+
 ![p1](media/16111324276391/p1.jpeg)
+</div>
 
 **上图三个蓝色方框内表示Yolov3的三个基本组件：**
 
@@ -47,8 +50,10 @@ yolov3处理图片过程如下
 **Backbone中卷积层的数量：**
 
 每个ResX中包含1+2*X个卷积层，因此整个主干网络Backbone中一共包含1+（1+2*1）+（1+2*2）+（1+2*8）+（1+2*8）+（1+2*4）=52，再加上一个FC全连接层，即可以组成一个Darknet53分类网络。不过在目标检测Yolov3中，去掉FC层，不过为了方便称呼，仍然把Yolov3的主干网络叫做Darknet53结构。
+<div align=center>
 
 ![f4](media/16111324276391/f4.png)
+</div>
 
 流程图如上，该图是基于voc数据集讲解的，voc数据集有20个类别，最下面红框中(13，13，75)表示预测结果的shape，实际上是13,13,3×25,表示有13*13的网格，每个网格有3个先验框（又称锚框，anchors，先验框下面有解释），每个先验框有25个参数(20个类别+5个参数)，这5个参数分别是x_offset、y_offset、height、width与置信度confidence，用这3个框去试探，试探是否框中有物体，如果有，就会把这个物体给框起来。如果是基于coco的数据集就会有80种类别，最后的维度应该为3x(80+5)=255，上面两个预测结果shape同理（红框）
 
@@ -112,8 +117,10 @@ yolov3的预测原理是分别将整幅图分为13x13、26x26、52x52的网格�
 **(tx,ty)**: 目标中心点相对于该点所在网格左上角的偏移量  
 **(tw,th)**: 预测边框的宽和高  
 **σ:激活函数**，论文作者用的是sigmoid函数，[0,1]之间概率，之所以用sigmoid取代之前版本的softmax，原因是softmax会扩大最大类别概率值而抑制其他类别概率值 ，图解如下
+<div align=center>
 
 ![f9](media/16111324276391/f9.png)
+</div>
 
 注：最终得到的边框坐标值是bx,by,bw,bh.而网络学习目标是tx，ty，tw，th。
 另外cy向下此处为正向
@@ -136,19 +143,26 @@ _如果图片中有好几个人脸，你这选取一个最大的，那第二个�
 4、一直重复这个过程，找到所有曾经被保留下来的矩形框。  
 
 如下几幅图，一步步筛选得到最终边界框  
+<div align=center>
 
 ![f10](media/16111324276391/f10.png)
+</div>
 
 找到第一个  
+<div align=center>
 
 ![f11](media/16111324276391/f11.png)
+</div>
 
 找到第二个  
+<div align=center>
 
 ![f12](media/16111324276391/f12.png)
+</div>
 
 ## YOLO v4
 ### 网络结构图
+
 ![p2](media/16111324276391/p2.jpeg)
 
 ### 相对v3的改进
@@ -165,18 +179,26 @@ _如果图片中有好几个人脸，你这选取一个最大的，那第二个�
 
 **（1）Mosaic数据增强**
 Yolov4中使用的Mosaic是参考2019年底提出的CutMix数据增强的方式，但CutMix只使用了两张图片进行拼接，而Mosaic数据增强则采用了4张图片，随机缩放、随机裁剪、随机排布的方式进行拼接。
+<div align=center>
+
 ![p3](media/16111324276391/p3.jpeg)
+</div>
 
 这里首先要了解为什么要进行Mosaic数据增强呢？
 
 在平时项目训练时，小目标的AP一般比中目标和大目标低很多。而Coco数据集中也包含大量的小目标，但比较麻烦的是小目标的分布并不均匀。
 
 首先看下小、中、大目标的定义：[《Augmentation for small object detection》](https://arxiv.org/pdf/1902.07296.pdf)
+<div align=center>
+
 ![p4](media/16111324276391/p4.jpeg)
+</div>
 
 可以看到小目标的定义是目标框的长宽0×0~32×32之间的物体。
+<div align=center>
 
 ![p5](media/16111324276391/p5.jpeg)
+</div>
 
 但在整体的数据集中，小、中、大目标的占比并不均衡。
 如上表所示，Coco数据集中小目标占比达到41.4%，数量比中目标和大目标都要多。
@@ -198,8 +220,10 @@ Yolov4中使用的Mosaic是参考2019年底提出的CutMix数据增强的方式�
 ### BackBone创新
 **(1)CSPDarknet53**
 CSPDarknet53是在Yolov3主干网络Darknet53的基础上，借鉴2019年CSPNet的经验，产生的Backbone结构，其中包含了5个CSP模块。
+<div align=center>
 
 ![p6](media/16111324276391/p6.jpeg)
+</div>
 
 每个CSP模块前面的卷积核的大小都是3*3，因此可以起到下采样的作用。
 
@@ -223,27 +247,35 @@ CSPNet的作者认为推理计算过高的问题是由于网络优化中的梯�
 
 **(2)Mish激活函数**
 Yolov4的Backbone中都使用了Mish激活函数，而后面的网络则还是使用leaky_relu函数。
+<div align=center>
 
 ![p7](media/16111324276391/p7.jpeg)
+</div>
 
 **(3)Dropblock**
 Yolov4中使用的Dropblock，其实和常见网络中的Dropout功能类似，也是缓解过拟合的一种正则化方式。
 
 传统的Dropout很简单，一句话就可以说的清：随机删除减少神经元的数量，使网络变得更简单。
+<div align=center>
 
 ![p8](media/16111324276391/p8.jpeg)
+</div>
 
 而Dropblock和Dropout相似，比如下图：
+<div align=center>
 
 ![p9](media/16111324276391/p9.jpeg)
+</div>
 
 中间Dropout的方式会随机的删减丢弃一些信息，但Dropblock的研究者认为，卷积层对于这种随机丢弃并不敏感，因为卷积层通常是三层连用：卷积+激活+池化层，池化层本身就是对相邻单元起作用。而且即使随机丢弃，卷积层仍然可以从相邻的激活单元学习到相同的信息。
 
 因此，在全连接层上效果很好的Dropout在卷积层上效果并不好。所以右图Dropblock的研究者则干脆整个局部区域进行删减丢弃。
 
 这种方式其实是借鉴2017年的cutout数据增强的方式，cutout是将输入图像的部分区域清零，而Dropblock则是将Cutout应用到每一个特征图。而且并不是用固定的归零比率，而是在训练时以一个小的比率开始，随着训练过程线性的增加这个比率。
+<div align=center>
 
 ![p10](media/16111324276391/p10.jpeg)
+</div>
 
 Dropblock的研究者与Cutout进行对比验证时，发现有几个特点：
 
@@ -262,12 +294,16 @@ Yolov4的Neck结构主要采用了SPP模块、FPN+PAN的方式。
 
 **(1)SPP模块**
 SPP模块，其实在Yolov3中已经存在了，在Yolov4的C++代码文件夹中有一个Yolov3_spp版本，但有的同学估计从来没有使用过，在Yolov4，SPP模块仍然是在Backbone主干网络之后：
+<div align=center>
 
 ![p11](media/16111324276391/p11.jpeg)
+</div>
 
 作者在SPP模块中，使用k={1*1,5*5,9*9,13*13}的最大池化的方式，再将不同尺度的特征图进行Concat操作。
+<div align=center>
 
 ![p12](media/16111324276391/p12.jpeg)
+</div>
 
 在[《DC-SPP-Yolo》](https://arxiv.org/ftp/arxiv/papers/1903/1903.08589.pdf)中也对Yolo目标检测的SPP模块进行了对比测试。
 
@@ -281,15 +317,20 @@ PAN()
 PAN结构比较有意思，看了网上Yolov4关于这个部分的讲解，大多都是讲的比较笼统的，而PAN是借鉴图像分割领域PANet的创新点，有些同学可能不是很清楚。[PAN](https://arxiv.org/abs/1803.01534)
 
 我们先来看下Yolov3中Neck的FPN结构:
+<div align=center>
 
 ![p13](media/16111324276391/p13.jpeg)
+</div>
 
 可以看到经过几次下采样，三个紫色箭头指向的地方，输出分别是76*76、38*38、19*19。
 
 以及最后的Prediction中用于预测的三个特征图①19*19*255、②38*38*255、③76*76*255。[注：255表示80类别(1+4+80)×3=255]
 
 我们将Neck部分用立体图画出来，更直观的看下两部分之间是如何通过FPN结构融合的。
+<div align=center>
+
 ![p14](media/16111324276391/p14.jpeg)
+</div>
 
 如图所示，FPN是自顶向下的，将高层的特征信息通过上采样的方式进行传递融合，得到进行预测的特征图。
 
@@ -304,8 +345,10 @@ PAN结构比较有意思，看了网上Yolov4关于这个部分的讲解，大�
 以及最后Prediction中用于预测的三个特征图：①76*76*255，②38*38*255，③19*19*255。
 
 我们也看下Neck部分的立体图像，看下两部分是如何通过FPN+PAN结构进行融合的。
+<div align=center>
 
 ![p16](media/16111324276391/p16.jpeg)
+</div>
 
 和Yolov3的FPN层不同，Yolov4在FPN层的后面还添加了一个自底向上的特征金字塔。
 
@@ -344,7 +387,10 @@ Yolov3的FPN层输出的三个大小不一的特征图①②③直接进行预�
 **注意点二**
 
 原本的PANet网络的PAN结构中，两个特征图结合是采用shortcut操作，而Yolov4中则采用concat（route）操作，特征图融合后的尺寸发生了变化。
+<div align=center>
+
 ![p17](media/16111324276391/p17.jpeg)
+</div>
 
 ### Prediction创新
 **(1)CIOU_loss**
@@ -355,11 +401,16 @@ Bounding Box Regeression的Loss近些年的发展过程是：Smooth L1 Loss-> Io
 我们从最常用的IOU_Loss开始，进行对比拆解分析，看下Yolov4为啥要选择CIOU_Loss。
 
 **IOU_Loss**  
+<div align=center>
+
 ![p18](media/16111324276391/p18.jpeg)
+</div>
 
 可以看到IOU的loss其实很简单，主要是交集/并集，但其实也存在两个问题。
+<div align=center>
 
 ![p19](media/16111324276391/p19.jpeg)
+</div>
 
 问题1：即状态1的情况，当预测框和目标框不想交时，IOU=0，无法反应两个框距离的远近，此时损失函数不可导，IOU_Loss无法优化两个框不相交的情况。
 
@@ -368,11 +419,16 @@ Bounding Box Regeression的Loss近些年的发展过程是：Smooth L1 Loss-> Io
 因此2019年出现了GIOU来进行改进。
 
 **GIOU_Loss**  
+<div align=center>
+
 ![p20](media/16111324276391/p20.jpeg)
+</div>
 
 可以看到右图GIOU_中，增加了相交尺度的衡量方式，但还存在一种不足：
+<div align=center>
 
 ![p21](media/16111324276391/p21.jpeg)
+</div>
 
 问题：状态1、2、3都是预测框在目标框内部且预测框大小一致的情况，这时预测框和目标框的差集都是相同的，因此这三种状态的GIOU值也都是相同的，这时GIOU退化成了IOU，无法区分相对位置关系。
 基于这个问题，2020年的AAAI又提出了DIOU_Loss。
@@ -387,14 +443,18 @@ Bounding Box Regeression的Loss近些年的发展过程是：Smooth L1 Loss-> Io
 二：如何在预测框和目标框重叠时，回归的更准确？
 
 针对第一个问题，提出了DIOU_Loss（Distance_IOU_Loss）
+<div align=center>
 
 ![p22](media/16111324276391/p22.jpeg)
+</div>
 
 DIOU_Loss考虑了重叠面积和中心点距离，当目标框包裹预测框的时候，直接度量2个框的距离，因此DIOU_Loss收敛的更快。
 
 但就像前面的目标框回归函数所说的，没有考虑到长宽比。
+<div align=center>
 
 ![p23](media/16111324276391/p23.jpeg)
+</div>
 
 比如上面三种情况，目标框包裹预测框，本来DIOU_Loss可以起作用。
 
@@ -441,8 +501,10 @@ Nms主要用于预测框的筛选，常用的目标检测算法中，一般采�
 将其中计算IOU的部分替换成DIOU的方式：
 
 再来看下实际的案例
+<div align=center>
 
 ![p26](media/16111324276391/p26.jpeg)
+</div>
 
 在上图重叠的摩托车检测中，中间的摩托车因为考虑边界框中心点的位置信息，也可以回归出来。
 
