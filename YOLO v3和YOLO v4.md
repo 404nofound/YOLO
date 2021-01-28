@@ -11,16 +11,19 @@
 <div align=center>
 
 ![f1](media/16111324276391/f1.png)
+</div>
 
 图中的红框是通过在yolov3检测最后得出的边界框（bounding box），如下图的黄色框也是边界框
 <div align=center>
 
 ![f2](media/16111324276391/f2.png)
+</div>
 
 yolov3处理图片过程如下
 <div align=center>
 
 ![f3](media/16111324276391/f3.png)
+</div>
 
 首先一张图片传进yolo，yolo会将其转化为416×416大小的网格，增加灰度条用于防止失真，之后图片会分成三个网格图片（13×13，26×26，52×52）
 
