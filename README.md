@@ -1,2 +1,2 @@
 # Computer-Vision
-Record CV study, including YOLO
+Record CV study, including YOLO, PyTorch
